@@ -1,21 +1,5 @@
 #include <iostream>
 using namespace std;
-void sort(int arr[],int n)
-{
-    int temp;
-    for(int i=0;i<n;i++)
-    {
-        for(int j=0;j<n-i-1;j++)
-        {
-            if(arr[j]>arr[j+1])
-            {
-                temp=arr[j];
-                arr[j]=arr[j+1];
-                arr[j+1]=temp;
-            }
-        }
-    }
-}
 void binary_search(int arr[],int n,int num)
 {
     int start=0,end=n-1,mid,c=0;
@@ -42,16 +26,9 @@ void binary_search(int arr[],int n,int num)
 }
 int main()
 {
-    cout << "Enter the number of elements in array" << endl;
-    int n,num;
-    cin >> n;
-    int arr[n];
-    cout << "Enter " << n << " elements" << endl;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> arr[i];
-    }
-    sort(arr,n);
+    int n=7;
+    int arr[n] = {1,2,3,4,5,6,7};
+    int num;
     cout << "Enter the number to be searched" << endl;
     cin >> num;
     binary_search(arr,n,num);
