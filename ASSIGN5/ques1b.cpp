@@ -6,11 +6,19 @@ struct Node {
     Node* next;
 };
 
-void insertAtBeginning(Node*& head, int val) {
+void insertAtEnd(Node*& head, int val) {
     Node* newNode = new Node();
     newNode->data = val;
-    newNode->next = head;
-    head = newNode;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+
+    Node* temp = head;
+    while (temp->next != NULL) temp = temp->next;
+    temp->next = newNode;
 }
 
 void display(Node* head) {
@@ -23,9 +31,9 @@ void display(Node* head) {
 
 int main() {
     Node* head = NULL;
-    insertAtBeginning(head, 10);
-    insertAtBeginning(head, 20);
-    insertAtBeginning(head, 30);
+    insertAtEnd(head, 10);
+    insertAtEnd(head, 20);
+    insertAtEnd(head, 30);
     display(head);  
     return 0;
 }

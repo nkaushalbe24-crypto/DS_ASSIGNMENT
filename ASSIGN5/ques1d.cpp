@@ -6,11 +6,11 @@ struct Node {
     Node* next;
 };
 
-void insertAtBeginning(Node*& head, int val) {
-    Node* newNode = new Node();
-    newNode->data = val;
-    newNode->next = head;
-    head = newNode;
+void deleteFromBeginning(Node*& head) {
+    if (head == NULL) return;
+    Node* temp = head;
+    head = head->next;
+    delete temp;
 }
 
 void display(Node* head) {
@@ -22,10 +22,8 @@ void display(Node* head) {
 }
 
 int main() {
-    Node* head = NULL;
-    insertAtBeginning(head, 10);
-    insertAtBeginning(head, 20);
-    insertAtBeginning(head, 30);
+    Node* head = new Node{10, new Node{20, new Node{30, NULL}}};
+    deleteFromBeginning(head);  
     display(head);  
     return 0;
 }
