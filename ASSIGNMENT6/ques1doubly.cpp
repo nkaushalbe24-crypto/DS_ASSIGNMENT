@@ -3,69 +3,70 @@ using namespace std;
 
 struct Node {
     int data;
+    Node* prev;
     Node* next;
 };
 
-class CircularList {
+class DoublyList {
     Node* head;
 
 public:
-    CircularList() { head = NULL; }
-
+    DoublyList() { head = NULL; }
     void insertAtBeginning(int value) {
         Node* newNode = new Node;
         newNode->data = value;
+        newNode->prev = NULL;
+        newNode->next = head;
 
-        if (head == NULL) {
-            head = newNode;
-            head->next = head;
-        } else {
-            Node* temp = head;
-            while (temp->next != head)
-                temp = temp->next;
-            newNode->next = head;
-            temp->next = newNode;
-            head = newNode;
-        }
+        if (head != NULL)
+            head->prev = newNode;
+
+        head = newNode;
         cout << "Inserted " << value << " at beginning.\n";
     }
 
+    
     void insertAtEnd(int value) {
         Node* newNode = new Node;
         newNode->data = value;
+        newNode->next = NULL;
 
         if (head == NULL) {
+            newNode->prev = NULL;
             head = newNode;
-            head->next = head;
-        } else {
-            Node* temp = head;
-            while (temp->next != head)
-                temp = temp->next;
-            temp->next = newNode;
-            newNode->next = head;
-        }
-        cout << "Inserted " << value << " at end.\n";
-    }
-
-    void insertAfter(int key, int value) {
-        if (head == NULL) {
-            cout << "List is empty.\n";
+            cout << "Inserted " << value << " at end.\n";
             return;
         }
 
         Node* temp = head;
-        do {
-            if (temp->data == key) {
-                Node* newNode = new Node;
-                newNode->data = value;
-                newNode->next = temp->next;
-                temp->next = newNode;
-                cout << "Inserted " << value << " after " << key << ".\n";
-                return;
-            }
+        while (temp->next != NULL)
             temp = temp->next;
-        } while (temp != head);
-        cout << "Node " << key << " not found.\n";
+
+        temp->next = newNode;
+        newNode->prev = temp;
+        cout << "Inserted " << value << " at end.\n";
+    }
+
+    void insertAfter(int key, int value) {
+        Node* temp = head;
+        while (temp != NULL && temp->data != key)
+            temp = temp->next;
+
+        if (temp == NULL) {
+            cout << "Node " << key << " not found.\n";
+            return;
+        }
+
+        Node* newNode = new Node;
+        newNode->data = value;
+        newNode->next = temp->next;
+        newNode->prev = temp;
+
+        if (temp->next != NULL)
+            temp->next->prev = newNode;
+
+        temp->next = newNode;
+        cout << "Inserted " << value << " after " << key << ".\n";
     }
 
     void deleteNode(int key) {
@@ -74,59 +75,44 @@ public:
             return;
         }
 
-        Node* curr = head;
-        Node* prev = NULL;
+        Node* temp = head;
 
-        if (head->data == key) {
-            Node* temp = head;
-            while (temp->next != head)
-                temp = temp->next;
-            if (head->next == head) {
-                delete head;
-                head = NULL;
-            } else {
-                temp->next = head->next;
-                delete head;
-                head = temp->next;
-            }
-            cout << "Deleted node " << key << ".\n";
+        while (temp != NULL && temp->data != key)
+            temp = temp->next;
+
+        if (temp == NULL) {
+            cout << "Node " << key << " not found.\n";
             return;
         }
 
-        do {
-            prev = curr;
-            curr = curr->next;
-            if (curr->data == key) {
-                prev->next = curr->next;
-                delete curr;
-                cout << "Deleted node " << key << ".\n";
-                return;
-            }
-        } while (curr != head);
+        if (temp->prev != NULL)
+            temp->prev->next = temp->next;
+        else
+            head = temp->next;
 
-        cout << "Node " << key << " not found.\n";
+        if (temp->next != NULL)
+            temp->next->prev = temp->prev;
+
+        delete temp;
+        cout << "Deleted node " << key << ".\n";
     }
 
+   
     void search(int key) {
-        if (head == NULL) {
-            cout << "List is empty.\n";
-            return;
-        }
-
         Node* temp = head;
         int pos = 1;
-        do {
+        while (temp != NULL) {
             if (temp->data == key) {
                 cout << "Node " << key << " found at position " << pos << ".\n";
                 return;
             }
             temp = temp->next;
             pos++;
-        } while (temp != head);
-
+        }
         cout << "Node " << key << " not found.\n";
     }
 
+  
     void display() {
         if (head == NULL) {
             cout << "List is empty.\n";
@@ -134,17 +120,17 @@ public:
         }
 
         Node* temp = head;
-        cout << "Circular List: ";
-        do {
+        cout << "Doubly List (forward): ";
+        while (temp != NULL) {
             cout << temp->data << " ";
             temp = temp->next;
-        } while (temp != head);
+        }
         cout << endl;
     }
 };
 
 int main() {
-    CircularList list;
+    DoublyList list;
     int choice, value, key;
 
     do {
