@@ -1,5 +1,5 @@
 #include <iostream>
-#include <unordered_set>
+#include <unordered_map>
 using namespace std;
 
 int main() {
@@ -12,16 +12,16 @@ int main() {
     for(int i = 0; i < n; i++)
         cin >> nums[i];
 
-    unordered_set<int> s;
+    unordered_map<int, int> freq;
 
     for(int i = 0; i < n; i++) {
-        if(s.find(nums[i]) != s.end()) {  
-            cout << "true";               
-            return 0;
-        }
-        s.insert(nums[i]);
+        freq[nums[i]]++;
     }
 
-    cout << "false";  
+    cout << "Frequency of each number:\n";
+    for(auto x : freq) {
+        cout << x.first << " → " << x.second << " times\n";
+    }
+
     return 0;
 }
